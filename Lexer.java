@@ -179,6 +179,8 @@ public class Lexer {
 
      }// else generate token from input
 
+     return null;
+     
    }// getNext
 
    public Token getNextToken() {

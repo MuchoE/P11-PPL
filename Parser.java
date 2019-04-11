@@ -81,8 +81,8 @@ public class Parser {
      System.out.println("-----> parsing <params>:");
 
      Token token = lex.getNextToken();
-     Node name = new Node("name", token.getDetails(), null, null, null);
      errorCheck( token, "name" );
+     Node name = new Node("name", token.getDetails(), null, null, null);
 
      token = lex.getNextToken();
 
@@ -93,7 +93,7 @@ public class Parser {
      }
      else {
         lex.putBackToken(token);
-        return new Node("params", name, null, null);
+        return name;
      }
    }
 

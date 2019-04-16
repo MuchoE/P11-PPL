@@ -42,7 +42,7 @@ public class Node {
     first = one;  second = two;  third = three;
     id = count;
     count++;
-    System.out.println( this );
+    // System.out.println( this );
   }
 
   // construct a node with specified info
@@ -100,7 +100,7 @@ public class Node {
   // to children
   public void draw( Camera cam, double x, double y, double h, double v ) {
 
-    System.out.println("draw node " + id );
+    // System.out.println("draw node " + id );
 
     // set drawing color
     cam.setColor( Color.black );
@@ -113,7 +113,7 @@ public class Node {
     // in a nice, uniform manner
     Node[] children = getChildren();
     int number = children.length;
-    System.out.println("has " + number + " children");
+    // System.out.println("has " + number + " children");
 
     double top = y - 0.75*v;
 
@@ -133,7 +133,7 @@ public class Node {
       children[2].draw( cam, x+h, y-v, h/2, v );     cam.drawLine( x, y, x+h, top );
     }
     else {
-      System.out.println("no Node kind has more than 3 children???");
+      // System.out.println("no Node kind has more than 3 children???");
       System.exit(1);
     }
 
@@ -150,7 +150,7 @@ public class Node {
 
   // ask this node to execute itself
   // (for nodes that don't return a value)
-   // 
+   //
    // public void execute() {
    //
    //      if( kind.equals("defs") ) {
@@ -176,98 +176,98 @@ public class Node {
    //         error("Executing unknown kind of node [" + kind + "]");
    //      }
    // }
-
-   public void execute() {
-
-     //      System.out.println("Executing node " + id + " of kind " + kind );
-
-      if ( kind.equals("program") ) {
-         root = this;  // note the root node of entire tree
-         first.execute();  // execute the "main" funcCall
-      }// program
-
-      else if ( kind.equals("stmts") ) {
-         first.execute();
-         // returning is a flag saying that first
-         // wants to return, so don't do this node's second
-         if ( second != null && !returning ) {
-            second.execute();
-         }
-      }// stmts
-
-      else if ( kind.equals("funcCall") ) {
-         // execute a function call as a statement
-
-         String funcName = info;
-
-         // handle bifs
-         if ( funcName.equals("print") ) {
-            // evaluate the single <expr>
-            double value = first.first.evaluate();
-            if ( (int) value == value )
-               System.out.print( (int) value );
-            else
-               System.out.print( value );
-         }
-         else if ( funcName.equals("nl") ) {
-            System.out.println();
-         }
-
-         else {// user-defined function
-
-            Node body = passArgs( this, funcName );
-            body.second.execute();
-
-            returning = false;
-
-         }// user-defined function
-
-      }// funcCall
-
-      else if ( kind.equals("str") ) {
-         System.out.print( info );
-      }// str
-
-      else if ( kind.equals("sto") ) {
-         double value = first.evaluate();
-         table.store( info, value );
-      }// sto
-
-      else if ( kind.equals("if") ) {
-         double question = first.evaluate();
-         if ( question != 0 ) {
-            second.execute();
-         }
-         else {
-            third.execute();
-         }
-      }// if
-
-      else if ( kind.equals("return") ) {
-         returnValue = first.evaluate();
-         // System.out.println("return value is set to " + returnValue );
-
-         returning = true;
-
-         // manage memtables
-            // pop the top mem table
-            memStack.remove( memStack.size()-1 );
-
-            // convenience note new top (if any)
-            if ( memStack.size() > 0 )
-               table = memStack.get( memStack.size()-1 );
-            else {// notice program is over
-               System.out.println(".......execution halting");
-               System.exit(0);
-            }
-
-      }// return
-
-      else {
-         error("Executing unknown kind of node [" + kind + "]");
-      }
-
-   }// execute
+   //
+   // public void execute() {
+   //
+   //   //      System.out.println("Executing node " + id + " of kind " + kind );
+   //
+   //    if ( kind.equals("program") ) {
+   //       root = this;  // note the root node of entire tree
+   //       first.execute();  // execute the "main" funcCall
+   //    }// program
+   //
+   //    else if ( kind.equals("stmts") ) {
+   //       first.execute();
+   //       // returning is a flag saying that first
+   //       // wants to return, so don't do this node's second
+   //       if ( second != null && !returning ) {
+   //          second.execute();
+   //       }
+   //    }// stmts
+   //
+   //    else if ( kind.equals("funcCall") ) {
+   //       // execute a function call as a statement
+   //
+   //       String funcName = info;
+   //
+   //       // handle bifs
+   //       if ( funcName.equals("print") ) {
+   //          // evaluate the single <expr>
+   //          double value = first.first.evaluate();
+   //          if ( (int) value == value )
+   //             System.out.print( (int) value );
+   //          else
+   //             System.out.print( value );
+   //       }
+   //       else if ( funcName.equals("nl") ) {
+   //          System.out.println();
+   //       }
+   //
+   //       else {// user-defined function
+   //
+   //          Node body = passArgs( this, funcName );
+   //          body.second.execute();
+   //
+   //          returning = false;
+   //
+   //       }// user-defined function
+   //
+   //    }// funcCall
+   //
+   //    else if ( kind.equals("str") ) {
+   //       System.out.print( info );
+   //    }// str
+   //
+   //    else if ( kind.equals("sto") ) {
+   //       double value = first.evaluate();
+   //       table.store( info, value );
+   //    }// sto
+   //
+   //    else if ( kind.equals("if") ) {
+   //       double question = first.evaluate();
+   //       if ( question != 0 ) {
+   //          second.execute();
+   //       }
+   //       else {
+   //          third.execute();
+   //       }
+   //    }// if
+   //
+   //    else if ( kind.equals("return") ) {
+   //       returnValue = first.evaluate();
+   //       // System.out.println("return value is set to " + returnValue );
+   //
+   //       returning = true;
+   //
+   //       // manage memtables
+   //          // pop the top mem table
+   //          memStack.remove( memStack.size()-1 );
+   //
+   //          // convenience note new top (if any)
+   //          if ( memStack.size() > 0 )
+   //             table = memStack.get( memStack.size()-1 );
+   //          else {// notice program is over
+   //             System.out.println(".......execution halting");
+   //             System.exit(0);
+   //          }
+   //
+   //    }// return
+   //
+   //    else {
+   //       error("Executing unknown kind of node [" + kind + "]");
+   //    }
+   //
+   // }// execute
 
    // compute and return value produced by this node
 
@@ -315,125 +315,151 @@ public class Node {
    //       return Math.abs(value1) + Math.abs(value2) > 0 ? 1 : 0;
    //
    // }
-   public double evaluate() {
 
-      //      System.out.println("Evaluating node " + id + " of kind " + kind );
+   public Value evaluate() {
 
-      if ( kind.equals("var") ) {
-         return table.retrieve( info );
-      }// var
+     
 
-      else if ( kind.equals("num") ) {
-         return Double.parseDouble( info );
+      if( kind.equals("list") ) {
+          return first.evaluate();
+      } else if ( kind.equals("items") ) {
+          return first.evaluate();
+          return second.evaluate();
       }
-
-      else if ( kind.equals("+") || kind.equals("-") ) {
-         double value1 = first.evaluate();
-         double value2 = second.evaluate();
-         if ( kind.equals("+") )
-            return value1 + value2;
-         else
-            return value1 - value2;
+      if ( kind.equals("expr") ) {
+        if( kind.equals("plus") ){
+            double a = first.evaluate();
+            double b = second.evaluate();
+            return a + b;
+        } else if( kind.equals("minus") ){
+            double a = first.evaluate();
+            double b = second.evaluate();
+            return a - b;
+        } else if( kind.equals("times") ){
+            double a = first.evaluate();
+            double b = second.evaluate();
+            return a * b;
+        }
+      } else if ( kind.equals("num") ) {
+          return Double.parseDouble(info);
       }
-
-      else if ( kind.equals("*") || kind.equals("/") ) {
-         double value1 = first.evaluate();
-         double value2 = second.evaluate();
-         if ( kind.equals("*") )
-            return value1 * value2;
-         else
-            return value1 / value2;
-       }
-
-       else if ( kind.equals("opp") ) {
-          double value = first.evaluate();
-          return -value;
-       }
-
-       else if ( kind.equals("funcCall") ) {
-          // execute a function call to produce a value
-
-         String funcName = info;
-
-         double value;  // have all function calls put their value here
-                        // to return once at the bottom
-
-         // handle bifs
-
-         if ( member( funcName, bif0 ) ) {
-            if ( funcName.equals("input") )
-               value =  keys.nextDouble();
-            else {
-               error("unknown bif0 name [" + funcName + "]");
-               value = -1;
-            }
-         }
-         else if ( member( funcName, bif1 ) ) {
-            double arg1 = first.first.evaluate();
-
-            if ( funcName.equals("sqrt") )
-               value = Math.sqrt( arg1 );
-            else if ( funcName.equals("cos") )
-               value = Math.cos( Math.toRadians( arg1 ) );
-            else if ( funcName.equals("sin") )
-               value = Math.sin( Math.toRadians( arg1 ) );
-            else if ( funcName.equals("atan") )
-               value = Math.toDegrees( Math.atan( arg1 ) );
-            else if ( funcName.equals("round") )
-               value = Math.round( arg1 );
-            else if ( funcName.equals("trunc") )
-               value = (int) arg1;
-            else if ( funcName.equals("not") )
-               value = arg1 == 0 ? 1 : 0;
-            else {
-               error("unknown bif1 name [" + funcName + "]");
-               value = -1;
-            }
-         }
-         else if ( member( funcName, bif2 ) ) {
-            double arg1 = first.first.evaluate();
-            double arg2 = first.second.first.evaluate();
-
-            if ( funcName.equals("lt") )
-               value = arg1 < arg2 ? 1 : 0;
-            else if ( funcName.equals("le") )
-               value = arg1 <= arg2 ? 1 : 0;
-            else if ( funcName.equals("eq") )
-               value = arg1 == arg2 ? 1 : 0;
-            else if ( funcName.equals("ne") )
-               value = arg1 != arg2 ? 1 : 0;
-            else if ( funcName.equals("pow") )
-               value = Math.pow( arg1 , arg2 );
-            else if ( funcName.equals("and") )
-               value = arg1!=0 && arg2!=0 ? 1 : 0;
-            else if ( funcName.equals("or") )
-               value = arg1!=0 || arg2!=0 ? 1 : 0;
-            else {
-               error("unknown bif2 name [" + funcName + "]");
-               value = -1;
-            }
-         }
-
-         else {// user-defined function
-
-            Node body = passArgs( this, funcName );
-            body.second.execute();
-
-            value = returnValue;
-
-            returning = false;
-
-         }// user-defined function call
-
-         // uniformly finish
-         return value;
-
-       }// funcCall
-
-       else {
-          error("Evaluating unknown kind of node [" + kind + "]" );
-          return -1;
-       }
+      return 0.0;
+      //
+      // if ( kind.equals("var") ) {
+      //    return table.retrieve( info );
+      // }// var
+      //
+      // else if ( kind.equals("num") ) {
+      //    return Double.parseDouble( info );
+      // }
+      //
+      // else if ( kind.equals("+") || kind.equals("-") ) {
+      //    double value1 = first.evaluate();
+      //    double value2 = second.evaluate();
+      //    if ( kind.equals("+") )
+      //       return value1 + value2;
+      //    else
+      //       return value1 - value2;
+      // }
+      //
+      // else if ( kind.equals("*") || kind.equals("/") ) {
+      //    double value1 = first.evaluate();
+      //    double value2 = second.evaluate();
+      //    if ( kind.equals("*") )
+      //       return value1 * value2;
+      //    else
+      //       return value1 / value2;
+      //  }
+      //
+      //  else if ( kind.equals("opp") ) {
+      //     double value = first.evaluate();
+      //     return -value;
+      //  }
+      //
+      //  else if ( kind.equals("funcCall") ) {
+      //     // execute a function call to produce a value
+      //
+      //    String funcName = info;
+      //
+      //    double value;  // have all function calls put their value here
+      //                   // to return once at the bottom
+      //
+      //    // handle bifs
+      //
+      //    if ( member( funcName, bif0 ) ) {
+      //       if ( funcName.equals("input") )
+      //          value =  keys.nextDouble();
+      //       else {
+      //          error("unknown bif0 name [" + funcName + "]");
+      //          value = -1;
+      //       }
+      //    }
+      //    else if ( member( funcName, bif1 ) ) {
+      //       double arg1 = first.first.evaluate();
+      //
+      //       if ( funcName.equals("sqrt") )
+      //          value = Math.sqrt( arg1 );
+      //       else if ( funcName.equals("cos") )
+      //          value = Math.cos( Math.toRadians( arg1 ) );
+      //       else if ( funcName.equals("sin") )
+      //          value = Math.sin( Math.toRadians( arg1 ) );
+      //       else if ( funcName.equals("atan") )
+      //          value = Math.toDegrees( Math.atan( arg1 ) );
+      //       else if ( funcName.equals("round") )
+      //          value = Math.round( arg1 );
+      //       else if ( funcName.equals("trunc") )
+      //          value = (int) arg1;
+      //       else if ( funcName.equals("not") )
+      //          value = arg1 == 0 ? 1 : 0;
+      //       else {
+      //          error("unknown bif1 name [" + funcName + "]");
+      //          value = -1;
+      //       }
+      //    }
+      //    else if ( member( funcName, bif2 ) ) {
+      //       double arg1 = first.first.evaluate();
+      //       double arg2 = first.second.first.evaluate();
+      //
+      //       if ( funcName.equals("lt") )
+      //          value = arg1 < arg2 ? 1 : 0;
+      //       else if ( funcName.equals("le") )
+      //          value = arg1 <= arg2 ? 1 : 0;
+      //       else if ( funcName.equals("eq") )
+      //          value = arg1 == arg2 ? 1 : 0;
+      //       else if ( funcName.equals("ne") )
+      //          value = arg1 != arg2 ? 1 : 0;
+      //       else if ( funcName.equals("pow") )
+      //          value = Math.pow( arg1 , arg2 );
+      //       else if ( funcName.equals("and") )
+      //          value = arg1!=0 && arg2!=0 ? 1 : 0;
+      //       else if ( funcName.equals("or") )
+      //          value = arg1!=0 || arg2!=0 ? 1 : 0;
+      //       else {
+      //          error("unknown bif2 name [" + funcName + "]");
+      //          value = -1;
+      //       }
+      //    }
+      //
+      //    else {// user-defined function
+      //
+      //       Node body = passArgs( this, funcName );
+      //       body.second.execute();
+      //
+      //       value = returnValue;
+      //
+      //       returning = false;
+      //
+      //    }// user-defined function call
+      //
+      //    // uniformly finish
+      //    return value;
+      //
+      //  }// funcCall
+      //
+      //  else {
+      //     error("Evaluating unknown kind of node [" + kind + "]" );
+      //     return -1;
+      //  }
 
    }// evaluate
 
